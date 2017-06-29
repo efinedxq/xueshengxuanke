@@ -28,29 +28,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     #top{
        height:50px;
     }
+     .error{
+      color: red;
+      border:1px solid red;
+      width:200px;
+    }
+    .success{
+      color: green;
+      border: 1px solid green;
+      width: 200px;
+    }
 </style>
 </head>
 <body bgcolor="#b8d2e8">
 <div id="top"> </div>
-<form action="<%=path %>/AddTeaServlet.do" method="post">
+<form action="<%=path %>/AddTeaServlet.do" method="post" onsubmit="return checkForm()">
       <table >
 		<tr>
 			<td class="td">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</td>
-			<td><input class="input" type="text" name="t_name" id="t_name"></td>
+			<td><input class="input" type="text" name="t_name" id="t_name" onblur="check('t_name','name_msg')" onfocus="focu('t_name','name_msg')"></td>
 			<td>
 			   <div id="name_msg">用户名不少于两个字符</div>
 			</td>
 		</tr>
 		<tr>
 			<td class="td">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</td>
-			<td><input class="input" type="password" name="t_pass" id="t_pass"></td>
+			<td><input class="input" type="password" name="t_pass" id="t_pass" onblur="check('t_pass','pass_msg')" onfocus="focu('t_pass','pass_msg')"></td>
 			<td>
 			   <div id="pass_msg">密码在6-12位之间的数字字母组合</div>
 			</td>
 		</tr>
 		<tr>
 			<td class="td">确认密码:</td>
-			<td><input class="input" type="password"  id="t_rpass"></td>
+			<td><input class="input" type="password"  id="t_rpass" onblur="check('t_rpass','rpass_msg')" onfocus="focu('t_rpass','rpass_msg')"></td>
 			<td>
 			   <div id="rpass_msg">必须与密码相同</div>
 			</td>
@@ -65,14 +75,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 		<tr>
  		    <td class="td">手机号码:</td>
-		    <td><input class="input" type="text" name="t_tel" id="t_tel"></td>
+		    <td><input class="input" type="text" name="t_tel" id="t_tel"  onblur="check('t_tel','tel_msg')" onfocus="focu('t_tel','tel_msg')"></td>
 		    <td>
 			   <div id="tel_msg">手机号码必须是 11 位的数字</div>
 			</td>
 		</tr>
 		<tr>
 		  <td class="td">生日:</td>
-		  <td><input class="input" type="text" name="t_birth" id="t_birth"></td>
+		  <td><input class="input" type="text" name="t_birth" id="t_birth"  onblur="check('t_birth','birth_msg')" onfocus="focu('t_birth','birth_msg')"></td>
 		  <td>
 			   <div id="birth_msg">日期格式1999-10-21</div>
 		  </td>
@@ -97,4 +107,82 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  </table>
 	</form>
 </body>
+<script type="text/javascript">
+  var msg_text = {
+	  name_msg : "用户名不少于两个字符",
+	  pass_msg : "密码在6-12位之间的数字字母组合",
+	  rpass_msg : "必须与密码相同",
+	  tel_msg : "手机号码必须是 11 位的数字",
+      birth_msg:"日期格式1999-10-21"
+   };
+   var name_id = [
+			't_name',
+			't_pass' ,
+			't_rpass',
+			't_tel',
+			't_birth'];
+   var msg_id = [
+	   'name_msg',
+	   'pass_msg',
+	   'rpass_msg',
+	   'tel_msg',
+	   'birth_msg'];
+   
+   function check(text_id,msg_id){
+	   var name = document.getElementById(text_id);
+	   var v = name.value;
+	   var msg = document.getElementById(msg_id);
+       var flag = false;
+	   switch(text_id){
+	   case "t_name":
+		   if(v.length>=2) flag = true;
+		   break;
+	   case "t_pass":
+		   var reg = /^[A-Za-z0-9]{6,12}$/;
+		   if(v.match(reg)) flag = true;
+		   break;
+	   case "t_rpass":
+		   var nam = document.getElementById("m_pass");
+		   var rv = nam.value;
+		   if(v==rv&&rv!="") flag = true;
+		   break;
+	   case "t_tel":
+		   var reg = /^1[34578][0-9]{9}$/;
+		   if(v.match(reg)) flag = true;
+		   break;
+	   case "t_birth":
+		   var reg = /^[0-9]{4}-[0-9][2]-[0-9][2]$/;
+		   if(v.match(reg)) flag = true;
+		   break;
+	   }
+	   
+	   if(flag){
+		   msg.innerHTML = "正确";
+		   msg.className = "success";
+		   return true;
+	   }else{
+		  msg.innerHTML = "错误";  
+		  msg.className = "error";
+		  return false;
+	   }
+   }
+   function focu(text_id,msg_id){
+	   var name = document.getElementById(text_id);
+	    console.log(msg_text[msg_id]);
+	   //选中控件中的内容，高亮显示
+	   name.select();
+	   var msg = document.getElementById(msg_id)
+	   msg.innerHTML = msg_text[msg_id];
+	   msg.className = "";
+   }
+   function checkForm(){
+	   var flag = true;
+       for(i=0;i<name_id.length;i++){
+    	   if(!check(name_id[1],msg_id[i]))   {
+    		   flag = false; break;
+    		}
+       }
+       return flag;
+   }
+</script>
 </html>

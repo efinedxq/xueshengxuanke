@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -42,40 +43,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body bgcolor="#b8d2e8">
 <div id="top"> </div>
-<form action="<%=path %>/AddStuServlet.do" method="post" onsubmit="return checkForm()">
+<form action="<%=path %>/UpdateStuServlet.do" method="post" onsubmit="return checkForm()">
+        <input type="hidden" name="s_id" value="${stu.s_id }">
       <table >
 		<tr>
 			<td class="td">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名:</td>
-			<td><input class="input" type="text" name="s_name" id="s_name"  onblur="check('s_name','name_msg')" onfocus="focu('s_name','name_msg')"></td>
+			<td><input class="input" type="text" name="s_name" id="s_name"  onblur="check('s_name','name_msg')" onfocus="focu('s_name','name_msg')" value="${stu.s_name }"></td>
 			<td>
 			   <div id="name_msg">用户名不少于两个字符</div>
 			</td>
 		</tr>
 		<tr>
-			<td class="td">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</td>
-			<td><input class="input" type="password" name="s_pass" id="s_pass" onblur="check('s_pass','pass_msg')" onfocus="focu('s_pass','pass_msg')"></td>
-			<td>
-			   <div id="pass_msg">密码在6-12位之间的数字字母组合</div>
-			</td>
-		</tr>
-		<tr>
-			<td class="td">确认密码:</td>
-			<td><input class="input" type="password"  id="s_rpass" onblur="check('s_rpass','rpass_msg')" onfocus="focu('s_rpass','rpass_msg')"></td>
-			<td>
-			   <div id="rpass_msg">必须与密码相同</div>
-			</td>
-		</tr>
-		<tr>
 		  <td class="td">性别:</td>
-		  <td><input type="radio" name="s_sex" id="boy" value="男" checked="checked">男
-			  <input type="radio" name="s_sex" id="girl" value="女">女<br></td>
-		  <td>
+		  <td><c:if test="${stu.s_sex.equals('男')}">
+              <input type="radio" name="s_sex" id="boy" value="男" checked="checked">男
+		      <input type="radio" name="s_sex" id="girl" value="女">女
+		    </c:if>
+		    <c:if test="${stu.s_sex.equals('女')}">
+              <input type="radio" name="s_sex" id="boy" value="男">男
+		      <input type="radio" name="s_sex" id="girl" value="女" checked="checked">女
+		    </c:if>
+		    <c:if test="${stu.s_sex.equals('')||stu.s_sex==null}">
+              <input type="radio" name="s_sex" id="boy" value="男">男
+		      <input type="radio" name="s_sex" id="girl" value="女">女
+		    </c:if>
+		   <td>
 		      <div id="sex_msg"></div>
 		  </td>
 		</tr>
 		<tr>
  		    <td class="td">手机号码:</td>
-		    <td><input class="input" type="text" name="s_tel" id="s_tel" onblur="check('s_tel','tel_msg')" onfocus="focu('s_tel','tel_msg')"></td>
+		    <td><input class="input" type="text" name="s_tel" id="s_tel" onblur="check('s_tel','tel_msg')" onfocus="focu('s_tel','tel_msg')" value="${stu.s_tel}"></td>
 		    <td>
 			   <div id="tel_msg">手机号码必须是 11 位的数字</div>
 			</td>
@@ -84,10 +82,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  <td class="td">地址:</td>
 		  <td><select name="s_address">
 			    <option value="1">山东省</option>
-			     <option value="2">江苏省</option>
+			    <option value="2">江苏省</option>
 		      </select>
 		  </td>
 		  <td><div></div></td>
+		</tr>
+		<tr>
+ 		    <td class="td">状态:</td>
+		    <td><input class="input" type="text" name="s_status" id="s_status" onblur="check('s_status','status_msg')" onfocus="focu('s_status','status_msg')" value="${stu.s_status}"></td>
+		    <td>
+			   <div id="status_msg">是否删除状态 0 删除 1 保存</div>
+			</td>
 		</tr>
 		<tr>
 		   <td></td>
@@ -103,20 +108,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
   var msg_text = {
 	  name_msg : "用户名不少于两个字符",
-	  pass_msg : "密码在6-12位之间的数字字母组合",
-	  rpass_msg : "必须与密码相同",
-	  tel_msg : "手机号码必须是 11 位的数字"
+	  tel_msg : "手机号码必须是 11 位的数字",
+	  status_msg:"必须是 0 或 1"
+	  
    };
    var name_id = [
 			's_name',
-			's_pass' ,
-			's_rpass',
-			's_tel' ];
+			's_tel',
+			's_status'];
    var msg_id = [
 	   'name_msg',
-	   'pass_msg',
-	   'rpass_msg',
-	   'tel_msg' ];
+	   'tel_msg',
+	   'status_msg' ];
    
    function check(text_id,msg_id){
 	   var name = document.getElementById(text_id);
@@ -124,20 +127,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   var msg = document.getElementById(msg_id);
        var flag = false;
 	   switch(text_id){
-	   case "m_name":
+	   case "s_name":
 		   if(v.length>=2) flag = true;
 		   break;
-	   case "m_pass":
-		   var reg = /^[A-Za-z0-9]{6,12}$/;
+	   case "s_tel":
+		   var reg = /^1[34578][0-9]{9}$/;
 		   if(v.match(reg)) flag = true;
 		   break;
-	   case "m_rpass":
-		   var nam = document.getElementById("m_pass");
-		   var rv = nam.value;
-		   if(v==rv&&rv!="") flag = true;
-		   break;
-	   case "m_tel":
-		   var reg = /^1[34578][0-9]{9}$/;
+	   case "s_status":
+		   var reg = /^[01]{1}$/;
 		   if(v.match(reg)) flag = true;
 		   break;
 	   }

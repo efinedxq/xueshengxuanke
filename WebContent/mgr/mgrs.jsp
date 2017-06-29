@@ -17,6 +17,7 @@
 }
 
 table {
+    width:80%;
 	border: 1px solid black;
 	border-collapse: collapse;
 }
@@ -30,7 +31,7 @@ td {
    function update(id){
 	   var f = confirm("你是否要修改该记录？");
 	   if(f){
-			  window.location.href="<%=path%>/UpdateMgrServlet.do?m_id="+id;
+			  window.location.href="<%=path%>/OneMgrServlet.do?m_id="+id;
 	   } 
    }
    function del(id){

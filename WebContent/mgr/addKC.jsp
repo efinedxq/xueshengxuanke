@@ -28,22 +28,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     #top{
        height:50px;
     }
+    .error{
+      color: red;
+      border:1px solid red;
+      width:200px;
+    }
+    .success{
+      color: green;
+      border: 1px solid green;
+      width: 200px;
+    }
 </style>
 </head>
 <body bgcolor="#b8d2e8">
 <div id="top"> </div>
-<form action="<%=path %>/AddKcServlet.do" method="post">
+<form action="<%=path %>/AddKcServlet.do" method="post" onsubmit="return checkForm()">
       <table >
 		<tr>
 			<td class="td">课程名:</td>
-			<td><input class="input" type="text" name="kc_name" id="kc_name"></td>
+			<td><input class="input" type="text" name="kc_name" id="kc_name"  onblur="check('kc_name','name_msg')" onfocus="focu('kc_name','name_msg')"></td>
 			<td>
 			   <div id="name_msg"></div>
 			</td>
 		</tr>
 		<tr>
 			<td class="td">学分:</td>
-		    <td><input class="input" type="text" name="kc_score" id="kc_score"></td>
+		    <td><input class="input" type="text" name="kc_score" id="kc_score" onblur="check('kc_score','score_msg')" onfocus="focu('kc_score','score_msg')"></td>
 			<td>
 			   <div id="score_msg">必须是数字</div>
 			</td>
@@ -59,4 +69,60 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  </table>
 	</form>
 </body>
+<script type="text/javascript">
+  var msg_text = {
+	  name_msg : "课程名不为空",
+	  score_msg : "必须是数字"
+   };
+   var name_id = [
+			'kc_name',
+			'kc_score' ];
+   var msg_id = [
+	   'name_msg',
+	   'score_msg' ];
+   
+   function check(text_id,msg_id){
+	   var name = document.getElementById(text_id);
+	   var v = name.value;
+	   var msg = document.getElementById(msg_id);
+       var flag = false;
+	   switch(text_id){
+	   case "kc_name":
+		   if(v.length>0) flag = true;
+		   break;
+	   case "kc_score":
+		   var reg = /^[0-9]{2}$/;
+		   if(v.match(reg)) flag = true;
+		   break;
+	   }
+	   
+	   if(flag){
+		   msg.innerHTML = "正确";
+		   msg.className = "success";
+		   return true;
+	   }else{
+		  msg.innerHTML = "错误";  
+		  msg.className = "error";
+		  return false;
+	   }
+   }
+   function focu(text_id,msg_id){
+	   var name = document.getElementById(text_id);
+	    console.log(msg_text[msg_id]);
+	   //选中控件中的内容，高亮显示
+	   name.select();
+	   var msg = document.getElementById(msg_id)
+	   msg.innerHTML = msg_text[msg_id];
+	   msg.className = "";
+   }
+   function checkForm(){
+	   var flag = true;
+       for(i=0;i<name_id.length;i++){
+    	   if(!check(name_id[1],msg_id[i]))   {
+    		   flag = false; break;
+    		}
+       }
+       return flag;
+   }
+</script>
 </html>

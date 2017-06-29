@@ -16,6 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 }
 
 table {
+   width:80%;
 	border: 1px solid black;
 	border-collapse: collapse;
 }
@@ -26,21 +27,28 @@ td {
 }
 </style>
 <script type="text/javascript">
-   function update(i){
-	   f = document.forms[i];
-   	   f.submit = "<%=path%>/UpdateTeaServlet.do";
-   }
-   function del(i){
-	   f = document.forms[i];
-	   f.submit = "<%=path%>/DelTeaServlet.do";
-   }
+function update(id){
+	   var f = confirm("你是否要修改该记录？");
+	   if(f){
+			  window.location.href="<%=path%>/OneTeaServlet.do?t_id="+id;
+	   } 
+ }
+function del(id){
+	  var f = confirm("你是否要删除该记录？");
+	  if(f){
+		  window.location.href="<%=path%>/DeleTeaServlet.do?t_id="+id;
+	  } 
+}
 </script>
 </head>
 <body bgcolor="#b8d2e8">
  显示所有教师信息
+<form action="<%=path %>/DeleTeaServlet.do" method="post" onsubmit="checkIds()">
 <table border="1px" bordercolor="ffffff">
     <tr>
-        <td>序号</td>
+         <td><input type="checkbox"
+					onchange="selectCheckBox(this.checked)">
+	    </td>
         <td>编号</td>
         <td>姓名</td>
         <td>密码</td>
@@ -49,45 +57,57 @@ td {
         <td>生日</td>
         <td>住址</td>
         <td>状态</td>
-        <td></td>
+        <td>操作</td>
     </tr>
    
     <c:forEach items="${requestScope.teas}" var="item" varStatus="vs">
-    <form method="post">
     <tr>
         
-        <input type="hidden" name="t_no" value="${item.get('t_no')}">
-        <td>${vs.index+1}</td>
+       <td><input type="checkbox" name="t_id" value="${item.t_id}"></td>
         <td>${item.get("t_no") }</td>
-        <td><input type="text" name="t_name" size="4" value="${item.t_name}"/></td>
-        <td><input type="text" name="t_pass" value="${item.t_pass }"/></td>
+        <td>${item.t_name}</td>
+        <td>${item.t_pass }</td>
         <td >
-            <c:if test="${item.t_sex.equals('男')}">
-              <input type="radio" name="t_sex" id="boy" value="男" checked="checked">男
-		      <input type="radio" name="t_sex" id="girl" value="女">女
-		    </c:if>
-		    <c:if test="${item.t_sex.equals('女')}">
-              <input type="radio" name="t_sex" id="boy" value="男">男
-		      <input type="radio" name="t_sex" id="girl" value="女" checked="checked">女
-		    </c:if>
-		    <c:if test="${item.t_sex.equals('')||item.t_sex==null}">
-              <input type="radio" name="t_sex" id="boy" value="男">男
-		      <input type="radio" name="t_sex" id="girl" value="女">女
-		    </c:if>
+            ${item.t_sex}
         </td>
-        <td><input type="text" name="t_tel" value="${item.t_tel }"/></td>
-         <td><input type="text" name="t_birth" value="${item.t_birth }"/></td>
-        <td><input type="text" name="t_address" value="${item.t_address }"/></td>
+        <td>${item.t_tel }</td>
+         <td>${item.t_birth }</td>
+        <td>${item.t_address }</td>
         <td>${item.t_status}</td>
         <td>
-           <input type="button" onclick="update(${vs.index})" value="修改"/>
-           <input type="button" onclick="del(${vs.index})" value="删除"/>
+           <input type="button" onclick="update(${item.t_id})" value="修改"/>
+           <input type="button" onclick="del(${item.t_id})" value="删除"/>
         </td>
        
     </tr>
-     </form>
     </c:forEach>
-    
+     <tr>
+		<td colspan="10"><input type="submit"  value="批量删除"></td>
+    </tr>
 </table>
+</form>
 </body>
+<script type="text/javascript">
+  function selectCheckBox(flag){
+	  var chs = document.getElementsByName("t_id");
+	  for(var i = 0; i < chs.length; i ++){
+		  chs[i].checked = flag;
+	  }
+  }
+  function checkIds(){
+	  var chs = document.getElementsByName("t_id");
+	  var flag = false;
+	  for(var i = 0; i < chs.length; i ++){
+		  if(chs[i].checked == true){
+			  flag = true;
+			  break;
+		  }
+	  }
+	  if(flag){
+		  return true;
+	  }
+	  alert("请选择要删除的数据！");
+	  return false;
+  }
+</script>
 </html>

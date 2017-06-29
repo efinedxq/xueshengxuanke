@@ -74,11 +74,9 @@ public class KcInfoService {
 		boolean flag = false;
 		Map<String, String> param = Converter.convertMap(map);
 		Map<String, String> set = new HashMap<String, String>();
-		Map<String, String> where = new HashMap<String, String>();
 		set.put("kc_status", "0");
-		where.put("kc_no", param.get("kc_no"));
 		try {
-			int row = kcInfoDao.update(set, where);
+			int row = kcInfoDao.update(set, param);
 			if (row > 0) {
 				flag = true;
 			}
@@ -87,5 +85,24 @@ public class KcInfoService {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+	/**
+	 * 获取一个  课程信息
+	 * @param map
+	 * @return
+	 */
+	public Map<String,String> oneKc(Map<String, String[]> map){
+		Map<String,String> mgr = new HashMap<String,String>();
+		Map<String,String> param = Converter.convertMap(map);
+		try {
+			List<Map<String,String>> list= kcInfoDao.select(param);
+			if(list!=null||list.size()>0){
+				mgr = list.get(0);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mgr;
 	}
 }

@@ -13,7 +13,8 @@ public class MgrInfoService {
 		mgrInfoDao =  new MgrInfoDao();
 	}
 	/**
-	 * 添加成功则返回 1,否则返回 0;
+	 * 添加管理员
+	 * 添加 成功则返回 1,否则返回 0;
 	 * @param map
 	 * @return boolean
 	 */
@@ -38,6 +39,11 @@ public class MgrInfoService {
 		}
 		return flag;
 	}
+	/**
+	 * 删除管理员   删除成功是 true
+	 * @param map
+	 * @return
+	 */
 	public boolean doDelete(Map<String,String[]> map){
 		boolean flag = false;
 		//构建sql语句的条件部分
@@ -65,7 +71,33 @@ public class MgrInfoService {
 				mgrInfoDao.select(null);
 		return list;
 	}
-	
+	/**
+	 * 修改管理员信息后更新
+	 * @param map
+	 * @return
+	 */
+	public boolean update(Map<String, String[]> map) {
+		boolean flag = false;
+		Map<String, String> param = Converter.convertMap(map);
+		Map<String, String> where = new HashMap<String, String>();
+		where.put("m_no", param.get("m_no"));
+		try {
+			int row = mgrInfoDao.update(param, where);
+			if (row > 0) {
+				flag = true;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	/**
+	 * 管理员登录
+	 * 根据用户名 密码登录。
+	 * @param map
+	 * @return
+	 */
 	public Map<String,String> login(Map<String, String[]> map){
 		Map<String,String> login = new HashMap<String,String>();
 		
@@ -89,5 +121,24 @@ public class MgrInfoService {
 			e.printStackTrace();
 		}
 		return login;
+	}
+	/**
+	 * 获取一个  管理员信息
+	 * @param map
+	 * @return
+	 */
+	public Map<String,String> oneMgr(Map<String, String[]> map){
+		Map<String,String> mgr = new HashMap<String,String>();
+		Map<String,String> param = Converter.convertMap(map);
+		try {
+			List<Map<String,String>> list= mgrInfoDao.select(param);
+			if(list!=null||list.size()>0){
+				mgr = list.get(0);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mgr;
 	}
 }

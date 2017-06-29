@@ -16,6 +16,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 }
 
 table {
+    width:80%;
 	border: 1px solid black;
 	border-collapse: collapse;
 }
@@ -26,63 +27,81 @@ td {
 }
 </style>
 <script type="text/javascript">
-   function update(i){
-	   f = document.forms[i];
-   	   f.submit = "<%=path%>/UpdateStuServlet.do";
-   }
-   function del(i){
-	   f = document.forms[i];
-	   f.submit = "<%=path%>/DelStuServlet.do";
-   }
+  function update(id){
+	   var f = confirm("你是否要修改该记录？");
+	   if(f){
+			  window.location.href="<%=path%>/OneStuServlet.do?s_id="+id;
+	   } 
+    }
+  function del(id){
+	  var f = confirm("你是否要删除该记录？");
+	  if(f){
+		  window.location.href="<%=path%>/DeleStuServlet.do?s_id="+id;
+	  } 
+  }
 </script>
 </head>
 <body bgcolor="#b8d2e8">
  显示所有学生信息
+ <form action="<%=path %>/DeleStuServlet.do" method="post" onsubmit="checkIds()">
 <table border="1px" bordercolor="ffffff">
     <tr>
-        <td>序号</td>
+        <td><input type="checkbox"
+					onchange="selectCheckBox(this.checked)">
+	    </td>
         <td>编号</td>
         <td>姓名</td>
         <td>密码</td>
         <td>性别</td>
-        <td>联系方式</td>
+        <td>手机号</td>
         <td>住址</td>
         <td>状态</td>
-        <td></td>
+        <td>操作</td>
     </tr>
    
     <c:forEach items="${requestScope.stus}" var="item" varStatus="vs">
-      <form method="post">
     <tr>
-        <input type="hidden" name="s_no" value="${item.get('s_no')}">
-        <td>${vs.index+1}</td>
-        <td>${item.get("s_no") }</td>
-        <td><input type="text" name="s_name" size="4" value="${item.s_name}"/></td>
-        <td><input type="text" name="s_pass" value="${item.s_pass }"/></td>
-        <td>
-            <c:if test="${item.s_sex.equals('男')}">
-              <input type="radio" name="s_sex" id="boy" value="男" checked="checked">男
-		      <input type="radio" name="s_sex" id="girl" value="女">女
-		    </c:if>
-		    <c:if test="${item.s_sex.equals('女')}">
-              <input type="radio" name="s_sex" id="boy" value="男">男
-		      <input type="radio" name="s_sex" id="girl" value="女" checked="checked">女
-		    </c:if>
-		    <c:if test="${item.s_sex.equals('')}">
-              <input type="radio" name="s_sex" id="boy" value="男">男
-		      <input type="radio" name="s_sex" id="girl" value="女">女
-		    </c:if>
-        </td>
-        <td><input type="text" name="s_tel" value="${item.s_tel }"/></td>
-        <td><input type="text" name="s_address" value="${item.s_address }"/></td>
+        <td><input type="checkbox" name="s_id" value="${item.s_id}"></td>
+        <td>${item.get("s_no")}</td>
+        <td>${item.s_name}</td>
+        <td>${item.s_pass }</td>
+        <td>${item.s_sex}</td>
+        <td>${item.s_tel }</td>
+        <td>${item.s_address}</td>
         <td>${item.s_status}</td>
         <td>
-           <input type="button" onclick="update(${vs.index})" value="修改"/>
-           <input type="button" onclick="del(${vs.index})" value="删除"/>
+           <input type="button" onclick="update(${item.s_id})" value="修改"/>
+           <input type="button" onclick="del(${item.s_id})" value="删除"/>
         </td>
     </tr>
-     </form>
     </c:forEach>
+    <tr>
+		<td colspan="9"><input type="submit"  value="批量删除"></td>
+    </tr>
 </table>
+</form>
 </body>
+<script type="text/javascript">
+  function selectCheckBox(flag){
+	  var chs = document.getElementsByName("s_id");
+	  for(var i = 0; i < chs.length; i ++){
+		  chs[i].checked = flag;
+	  }
+  }
+  function checkIds(){
+	  var chs = document.getElementsByName("s_id");
+	  var flag = false;
+	  for(var i = 0; i < chs.length; i ++){
+		  if(chs[i].checked == true){
+			  flag = true;
+			  break;
+		  }
+	  }
+	  if(flag){
+		  return true;
+	  }
+	  alert("请选择要删除的数据！");
+	  return false;
+  }
+</script>
 </html>
