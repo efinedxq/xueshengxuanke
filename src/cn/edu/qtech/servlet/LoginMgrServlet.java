@@ -35,7 +35,7 @@ public class LoginMgrServlet extends HttpServlet {
 			   //如果flag 位 true 表示 操作成功，把成功页面
 			   HttpSession session =  req.getSession();
 			   session.setAttribute("mgr", mgr);
-			   resp.sendRedirect("mgr/main.html");
+			   resp.sendRedirect("mgr/main.jsp");
 		   }else{
 			 //如果flag 位 false表示 操作失败，把失败页面
 			   resp.sendRedirect("mgr/login.jsp");
