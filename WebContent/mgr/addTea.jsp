@@ -82,7 +82,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 		<tr>
 		  <td class="td">生日:</td>
-		  <td><input class="input" type="text" name="t_birth" id="t_birth"  onblur="check('t_birth','birth_msg')" onfocus="focu('t_birth','birth_msg')"></td>
+		  <td><input class="input" type="date" name="t_birth" id="t_birth"></td>
 		  <td>
 			   <div id="birth_msg">日期格式1999-10-21</div>
 		  </td>
@@ -112,21 +112,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  name_msg : "用户名不少于两个字符",
 	  pass_msg : "密码在6-12位之间的数字字母组合",
 	  rpass_msg : "必须与密码相同",
-	  tel_msg : "手机号码必须是 11 位的数字",
-      birth_msg:"日期格式1999-10-21"
+	  tel_msg : "手机号码必须是 11 位的数字"
    };
    var name_id = [
 			't_name',
 			't_pass' ,
 			't_rpass',
-			't_tel',
-			't_birth'];
+			't_tel',];
    var msg_id = [
 	   'name_msg',
 	   'pass_msg',
 	   'rpass_msg',
-	   'tel_msg',
-	   'birth_msg'];
+	   'tel_msg'];
    
    function check(text_id,msg_id){
 	   var name = document.getElementById(text_id);
@@ -148,10 +145,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   break;
 	   case "t_tel":
 		   var reg = /^1[34578][0-9]{9}$/;
-		   if(v.match(reg)) flag = true;
-		   break;
-	   case "t_birth":
-		   var reg = /^[0-9]{4}-[0-9][2]-[0-9][2]$/;
 		   if(v.match(reg)) flag = true;
 		   break;
 	   }

@@ -80,14 +80,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 		<tr>
  		    <td class="td">生日:</td>
-		    <td><input class="input" type="text" name="t_birth" id="t_birth" onblur="check('t_birth','birth_msg')" onfocus="focu('t_birth','birth_msg')" value="${tea.t_birth}"></td>
+		    <td><input class="input" type="date" name="t_birth" id="t_birth"  value="${tea.t_birth}"></td>
 		    <td>
-			   <div id="birth_msg">格式1998-12-10</div>
+			   <div id="birth_msg"></div>
 			</td>
 		</tr>
 		<tr>
 		  <td class="td">地址:</td>
-		  <td><select name="t_address">
+		  <td><select name="t_address" id="t_address">
 			    <option value="1">山东省</option>
 			    <option value="2">江苏省</option>
 		      </select>
@@ -116,18 +116,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   var msg_text = {
 	  name_msg : "用户名不少于两个字符",
 	  tel_msg : "手机号码必须是 11 位的数字",
-	  birth_msg:"格式1998-12-10",
 	  status_msg:"必须是 0 或 1"
    };
    var name_id = [
 			't_name',
 			't_tel',
-			't_birth',
 			't_status'];
    var msg_id = [
 	   'name_msg',
 	   'tel_msg',
-	   'birth_msg',
 	   'status_msg' ];
    
    function check(text_id,msg_id){
@@ -141,10 +138,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   break;
 	   case "t_tel":
 		   var reg = /^1[34578][0-9]{9}$/;
-		   if(v.match(reg)) flag = true;
-		   break;
-	   case "t_birth":
-		   var reg = /^[0-9]{4}-[0-9][2]-[0-9][2]$/;
 		   if(v.match(reg)) flag = true;
 		   break;
 	   case "t_status":
@@ -180,6 +173,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		}
        }
        return flag;
+   }
+   
+   var address = '${tea.t_address}';
+   console.log(address);
+   var select = document.getElementById('t_address');
+   console.log(select);
+   for(var i = 0; i < select.options.length; i ++){
+	   if(select.options[i].value == address){
+		   console.log(i);
+		   select.options[i].selected = true;
+		   break;
+	   }
    }
 </script>
 </html>
