@@ -45,7 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     学生选课系统
 </div>
 <div id="logout">
-<a href="<%=path %>/OutMgrServlet.do" target="_top">注销</a>
+<font color="green"> 用户：${sessionScope.mgr.m_name}</font><a href="<%=path %>/OutMgrServlet.do" target="_top">注销</a>
 </div>
 </body>
 </html>
