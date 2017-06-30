@@ -148,7 +148,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    function checkForm(){
 	   var flag = true;
        for(i=0;i<name_id.length;i++){
-    	   if(!check(name_id[1],msg_id[i]))   {
+    	   if(!check(name_id[i],msg_id[i]))   {
     		   flag = false; break;
     		}
        }

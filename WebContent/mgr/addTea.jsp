@@ -82,9 +82,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 		<tr>
 		  <td class="td">生日:</td>
-		  <td><input class="input" type="date" name="t_birth" id="t_birth"></td>
+		  <td><input class="input" type="date" name="t_birth" id="t_birth" onblur="check('t_birth','birth_msg')" onfocus="focu('t_birth','birth_msg')"></td>
 		  <td>
-			   <div id="birth_msg">日期格式1999-10-21</div>
+			   <div id="birth_msg">不能为空</div>
 		  </td>
 		</tr>
 		<tr>
@@ -112,18 +112,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  name_msg : "用户名不少于两个字符",
 	  pass_msg : "密码在6-12位之间的数字字母组合",
 	  rpass_msg : "必须与密码相同",
+	  birth_msg: "不能为空",
 	  tel_msg : "手机号码必须是 11 位的数字"
    };
    var name_id = [
 			't_name',
 			't_pass' ,
 			't_rpass',
-			't_tel',];
+			't_tel',
+			't_birth'];
    var msg_id = [
 	   'name_msg',
 	   'pass_msg',
 	   'rpass_msg',
-	   'tel_msg'];
+	   'tel_msg',
+	   'birth_msg'];
    
    function check(text_id,msg_id){
 	   var name = document.getElementById(text_id);
@@ -139,9 +142,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   if(v.match(reg)) flag = true;
 		   break;
 	   case "t_rpass":
-		   var nam = document.getElementById("m_pass");
+		   var nam = document.getElementById("t_pass");
 		   var rv = nam.value;
 		   if(v==rv&&rv!="") flag = true;
+		   break;
+	   case "t_birth":
+		   console.log(v)
+		   if(v!=""&&v!=null) flag = true;
 		   break;
 	   case "t_tel":
 		   var reg = /^1[34578][0-9]{9}$/;
@@ -152,12 +159,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   if(flag){
 		   msg.innerHTML = "正确";
 		   msg.className = "success";
-		   return true;
 	   }else{
 		  msg.innerHTML = "错误";  
 		  msg.className = "error";
-		  return false;
 	   }
+	   return flag;
    }
    function focu(text_id,msg_id){
 	   var name = document.getElementById(text_id);
@@ -170,9 +176,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    }
    function checkForm(){
 	   var flag = true;
-       for(i=0;i<name_id.length;i++){
-    	   if(!check(name_id[1],msg_id[i]))   {
-    		   flag = false; break;
+       for(var i=0;i<name_id.length;i++){
+    	   if(!check(name_id[i],msg_id[i])){
+    		   flag = false; 
+    		   break;
     		}
        }
        return flag;
