@@ -11,6 +11,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="bootstrap/js/jquery.js"></script>
 <style type="text/css">
 * {
 	font-size: 14px;
@@ -45,7 +47,7 @@ td {
 <body bgcolor="#b8d2e8">
 	显示所有管理员信息
 	<form action="<%=path %>/DeleMgrServlet.do" method="post" onsubmit="checkIds()">
-		<table>
+		<table >
 			<tr>
 				<td><input type="checkbox"
 					onchange="selectCheckBox(this.checked)"></td>

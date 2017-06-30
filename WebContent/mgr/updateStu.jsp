@@ -40,6 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       width: 200px;
     }
 </style>
+
 </head>
 <body bgcolor="#b8d2e8">
 <div id="top"> </div>
@@ -80,9 +81,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 		<tr>
 		  <td class="td">地址:</td>
-		  <td><select name="s_address">
-			    <option value="1">山东省</option>
-			    <option value="2">江苏省</option>
+		  <td><select name="s_address" id="s_address">
+			    <option value="山东省">山东省</option>
+			    <option value="江苏省">江苏省</option>
 		      </select>
 		  </td>
 		  <td><div></div></td>
@@ -167,6 +168,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		}
        }
        return flag;
+   }
+    
+   //自动加载地址
+   var address = '${stu.s_address}';
+   console.log(address);
+   var select = document.getElementById('s_address');
+   console.log(select);
+   for(var i = 0; i < select.options.length; i ++){
+	   if(select.options[i].value == address){
+		   console.log(i);
+		   select.options[i].selected = true;
+		   break;
+	   }
    }
 </script>
 </html>
