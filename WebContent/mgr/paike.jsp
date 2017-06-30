@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -42,44 +43,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body bgcolor="#b8d2e8">
 <div id="top"> </div>
-<form action="<%=path %>/AddKcServlet.do" method="post" onsubmit="return checkForm()">
-      <table >
-		<tr>
-			<td class="td">课程名:</td>
-			<td><input class="input" type="text" name="kc_name" id="kc_name"  onblur="check('kc_name','name_msg')" onfocus="focu('kc_name','name_msg')"></td>
+<form action="<%=path %>/AddRKServlet.do" method="post">
+<table >
+    <tr>
+			<td class="td">教师名:</td>
+			<td><select name="rk_t_id" id="rk_t_id">
+                      <c:forEach items="${teas}" var="tea" >
+                          <option value="${tea.t_id}">${tea.t_name}</option>
+                      </c:forEach>
+                </select>
+            </td>
 			<td>
-			   <div id="name_msg"></div>
+			   <div id=""></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="td">学分:</td>
-		    <td><input class="input" type="text" name="kc_score" id="kc_score" onblur="check('kc_score','score_msg')" onfocus="focu('kc_score','score_msg')"></td>
+			<td class="td">课程名称:</td>
 			<td>
-			   <div id="score_msg">必须是数字</div>
+			    <select name="rk_kc_id" id="rk_kc_id">
+                    <c:forEach items="${kcs}" var="kc" >
+                        <option value="${kc.kc_id}">${kc.kc_name}</option>
+                   </c:forEach>
+             </select>
+			</td>
+			<td>
+			   <div id=""></div>
+			</td>
+		</tr>
+		<tr>
+			<td class="td">最大人数:</td>
+			<td><input type="number" name="rk_maxNum" id="rk_maxname" onblur="check('rk_maxNum','maxNum_msg')" onfocus="focu('rk_maxNum','maxNum_msg')"> </td>
+			<td>
+			   <div id="maxNum_msg"></div>
+			</td>
+		</tr>
+		<tr>
+ 		    <td class="td">开始时间:</td>
+		    <td><input type="date" name="rk_start" id="rk_start" onblur="check('rk_start','start_msg')" onfocus="focu('rk_start','start_msg')"></td>
+		    <td>
+			   <div id="start_msg"></div>
+			</td>
+		</tr>
+		<tr>
+ 		    <td class="td">结束时间:</td>
+		    <td><input type="date" name="rk_end" id="rk_end" onblur="check('rk_end','end_msg')" onfocus="focu('rk_end','end_msg')"></td>
+		    <td>
+			   <div id="end_msg"></div>
 			</td>
 		</tr>
 		<tr>
 		   <td></td>
 		   <td>
-		      <input class="btn" type="submit" value="保存">
+		      <input class="btn" type="submit"   value="保存">
 		      <input class="btn" type="reset" value="重置">
 		   </td>
 		   <td></td>
 		</tr>
-	  </table>
-	</form>
+</table>
+</form>
 </body>
 <script type="text/javascript">
   var msg_text = {
-	  name_msg : "课程名不为空",
-	  score_msg : "必须是数字"
+	  maxNum_msg : "必须是数字",
+	  start_msg:"不为空",
+	  end_msg : "在开始日期之后"
    };
    var name_id = [
-			'kc_name',
-			'kc_score' ];
+			'rk_maxNum',
+			'rk_start',
+			'rk_end' ];
    var msg_id = [
-	   'name_msg',
-	   'score_msg' ];
+	   'maxNum_msg','start_msg',
+	   'end_msg' ];
    
    function check(text_id,msg_id){
 	   var name = document.getElementById(text_id);
@@ -87,12 +122,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   var msg = document.getElementById(msg_id);
        var flag = false;
 	   switch(text_id){
-	   case "kc_name":
-		   if(v.length>0) flag = true;
+	   case "rk_maxNum":
+		   var reg = /^[0-9]$/;
+		   if(v!=null&&v.match(reg)) flag = true;
 		   break;
-	   case "kc_score":
-		   var reg = /^[0-9]{2}$/;
-		   if(v.match(reg)) flag = true;
+	   case "rk_start":
+		   if(v!=null&&v!="") flag = true;
+		   break;
+	   case "rk_end":
+		   var start = document.getElementById("rk_start");
+		   var vs = start.value;
+		   if(v > vs) flag = true;
 		   break;
 	   }
 	   
@@ -110,7 +150,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   var name = document.getElementById(text_id);
 	    console.log(msg_text[msg_id]);
 	   //选中控件中的内容，高亮显示
-	   name.select();
 	   var msg = document.getElementById(msg_id)
 	   msg.innerHTML = msg_text[msg_id];
 	   msg.className = "";

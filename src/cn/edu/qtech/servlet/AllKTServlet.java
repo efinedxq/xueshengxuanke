@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import cn.edu.qtech.service.MgrInfoService;
-import cn.edu.qtech.service.RkInfoService;
+import cn.edu.qtech.service.KcInfoService;
 import cn.edu.qtech.service.StuInfoService;
-
-@WebServlet("/DeleStuServlet.do")
-public class DeleStuServlet  extends HttpServlet {
+import cn.edu.qtech.service.TeaInfoService;
+@WebServlet("/AllKTServlet.do")
+public class AllKTServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,16 +24,16 @@ public class DeleStuServlet  extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        //处理中文
+	   KcInfoService kcService = new KcInfoService();
+       List<Map<String,String>> kcs= kcService.findAll();
+	 
+	   TeaInfoService mgrService = new TeaInfoService();
+	   List<Map<String,String>> teas= mgrService.findAll();
 	   
-		 Map<String,String[]> map = req.getParameterMap();
-
-		 StuInfoService stuService = new StuInfoService();
-		   
-		   boolean flag = stuService.doDelete(map);
-		   if(flag){
-			   resp.sendRedirect("success.jsp");
-		   }else {
-			   resp.sendRedirect("fail.jsp"); 
-		   }
+	   req.setAttribute("kcs", kcs);
+	   req.setAttribute("teas", teas);
+	   req.getRequestDispatcher("mgr/paike.jsp").forward(req, resp);
  	}
+
+
 }

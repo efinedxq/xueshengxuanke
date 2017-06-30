@@ -12,10 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import cn.edu.qtech.service.MgrInfoService;
 import cn.edu.qtech.service.RkInfoService;
-import cn.edu.qtech.service.StuInfoService;
-
-@WebServlet("/DeleStuServlet.do")
-public class DeleStuServlet  extends HttpServlet {
+@WebServlet("/AllRKServlet.do")
+public class AllRKServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,15 +24,10 @@ public class DeleStuServlet  extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        //处理中文
 	   
-		 Map<String,String[]> map = req.getParameterMap();
-
-		 StuInfoService stuService = new StuInfoService();
-		   
-		   boolean flag = stuService.doDelete(map);
-		   if(flag){
-			   resp.sendRedirect("success.jsp");
-		   }else {
-			   resp.sendRedirect("fail.jsp"); 
-		   }
+	   RkInfoService rkService = new RkInfoService();
+	   List<Map<String,String>> list= rkService.findAll();
+	   System.out.println(list);
+	   req.setAttribute("rks", list);
+	   req.getRequestDispatcher("mgr/showPaiKe.jsp").forward(req, resp);
  	}
 }

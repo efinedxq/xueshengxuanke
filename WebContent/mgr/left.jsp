@@ -63,10 +63,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <div>
        <table>
             <tr>
-                <td class="item"><a href="" target="main">添加排课</a></td>
+                <td class="item"><a href="<%=path%>/AllKTServlet.do" target="main">添加排课</a></td>
             </tr>
             <tr>
-                <td class="item"><a href="" target="main">查询排课</a></td>
+                <td class="item"><a href="<%=path %>/AllRKServlet.do" target="main">查询排课</a></td>
             </tr>
        </table>
     </div>
